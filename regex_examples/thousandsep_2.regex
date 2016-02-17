@@ -1,0 +1,4 @@
+while ($text =~ s/(\d)((\d\d\d)+\b)/$1,$2/g)
+{
+	# Just repeat until no match
+}

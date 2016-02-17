@@ -1,0 +1,57 @@
+% vim: autowrite
+\ProvidesPackage{cheatsheet}
+
+\usepackage[margin=0pt]{geometry} % Page margins and orientation
+\usepackage{hanging}
+\usepackage{environ}
+
+\setlength{\unitlength}{1mm} % Set the length that numerical units are measured in
+\setlength{\parindent}{0pt} % Stop paragraph indentation
+
+% Custom command for subsection titles
+\newcommand{\sectiontitle}[1]{\paragraph{#1} \ \\}
+
+% Custom command for adding a shortcut
+\newcommand{\command}[2]{\regex{#1}~\dotfill{}~#2\\}
+
+\newenvironment{cheatsheet}[1]{
+\begin{picture}(297,210) % Create a container for the page content
+\put(10,200){% Position on the page to put the title
+\begin{minipage}[t]{210mm} % The size and alignment of the title
+\section*{#1} % Title
+\end{minipage}
+}
+}{
+\end{picture} % End the container for the entire page
+}
+
+\NewEnviron{col1}{%
+\put(10,180){% Divide the page
+\begin{minipage}[t]{85mm} % Create a box to house text
+\BODY
+\end{minipage} % End the first column of text
+} % End the first division of the page
+}
+
+\NewEnviron{col2}{%
+\put(105,180){% Divide the page
+\begin{minipage}[t]{85mm} % Create a box to house text
+\BODY
+\end{minipage} % End the second column of text
+} % End the second division of the page
+}
+
+\NewEnviron{col3}{%
+\put(200,180){% Divide the page
+\begin{minipage}[t]{85mm} % Create a box to house tex
+\BODY
+\end{minipage} % End the third column of text
+} % End the third division of the page
+}
+
+\newenvironment{cheatnote}[1]{
+\begin{hangparas}{1em}{1}
+#1
+}{
+\end{hangparas}
+}

@@ -1,0 +1,15 @@
+my $balpar; # must be predefined
+$balpar = qr/
+	(?>
+		[^()]+
+		|
+		\( (??{ $balpar }) \)
+	)*
+/x;
+
+if ($text =~ m/\b(\w+)(\($balpar\))/) {
+	print "function: $1, args: $2\n";
+}
+if (not $text =~ m/^ $balpar $/x) {
+	print "mismatched parentheses\n";
+}

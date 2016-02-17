@@ -1,0 +1,7 @@
+\b(
+	\w[-.\w]* (?# user name)
+	\@
+	[-a-z0-9]+(\.[-a-z0-9]+)*
+	\.(com|org|net|gov|edu|info)
+	(\.[a-z]{2})?
+)\b

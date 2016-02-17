@@ -1,0 +1,12 @@
+# Using Perl regex objects
+my $level0 = qr/\(([^()]        )*\)/x;
+my $level1 = qr/\(([^()]|$level0)*\)/;
+my $level2 = qr/\(([^()]|$level1)*\)/;
+...
+my $balpar = qr/\(([^()]|$levelN)*\)/;
+
+# Using string to build regex
+my $balpar = "\(([^()])*\)"; # level 0
+foreach (1..$n) {
+	$balpar = "\(([^()]|$balpar)*\)";
+}

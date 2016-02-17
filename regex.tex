@@ -1,0 +1,541 @@
+% vim: autowrite
+\documentclass[11pt, a4paper, landscape]{scrartcl}
+
+\usepackage{cheatsheet} % See cheatsheet.sty
+\usepackage{nimbusmononarrow} % Required for tt font type
+\usepackage[utf8]{inputenc} % Required for inputting international characters
+\usepackage[T1]{fontenc} % Output font encoding for international characters
+\usepackage{graphicx} % Required for including images
+\usepackage{fdsymbol} % Required for some math symbols, like \lAngle
+\usepackage[dvipsnames]{xcolor} % Required for source-highlight coloured output
+\usepackage{textcomp} % Required for \textquotesingle
+
+\usepackage[% This block contains information used to annotate the PDF
+	colorlinks=false,
+	pdftitle={Regular Expressions},
+	pdfauthor={Gastón Simone},
+	pdfsubject={Regular Expressions cheatsheet},
+	pdfkeywords={Regular Expressions, Cheatsheet}
+]{hyperref}
+
+\newcommand{\regex}[1]{\texttt{#1}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\bs}{\textbackslash}
+\newcommand{\re}{\textit{re}}
+\newcommand{\dnet}{{.}Net}
+
+\begin{document}
+
+\begin{cheatsheet}{Regular Expressions Basics}
+
+\begin{col1}
+
+\re\ = \emph{regular expression}.\\
+\emph{greedy} = always favour matching\\
+\emph{lazy} = always favour not matching
+
+\sectiontitle{Any character}
+
+\command{.}{(dot) Any character, except new line}
+\command{\bs.}{Literal dot}
+
+\sectiontitle{Character classes (custom)}
+
+\command{[\dots]}{Any character listed}
+\command{[\^{}\dots]}{Any character \emph{not} listed}
+\command{[a-z]}{Range, any character from a to z}
+\command{[-\dots]}{To include dash (-), add it first}
+
+\sectiontitle{Boundaries}
+
+\command{\^{}, \$}{[Start, End] of line}
+\command{\bs{}A, \bs{}Z, \bs{}z}{[Start, End, End] of string}
+The difference between these occurs in multi-line mode.\\
+
+\command{\bs{}b}{Word boundary (Perl, Java, \dnet)}
+\command{\bs{}B}{Not word boundary}
+\command{\bs{}<,\bs{}>}{[Start, End] of word\textsuperscript{$\dagger$} (Vim)}
+\command{\bs{}G}{Match starts where the previous match ended}
+\command{\bs{}Q\emph{text}\bs{}E}{Literal \emph{text} inside regex}
+
+$\dagger$ Perl/Java/\dnet:\\
+\mbox{}\ \ \ \ \regex{\bs{}<} $\to$ \regex{(?<!\bs{}w)(?=\bs{}w)}\\
+\mbox{}\ \ \ \ \regex{\bs{}>} $\to$ \regex{(?<=\bs{}w)(?!\bs{}w)}\\
+(see \emph{Lookaround} in next page).
+
+\end{col1}
+
+\begin{col2}
+
+\sectiontitle{Grouping and Backreferences}
+
+\command{(\re)}{Group \re\ as a unit (Perl, Java, \dnet)}
+\command{\bs(\re\bs)}{Vim without \emph{very magic}}
+\command{\bs1,\dots,\bs9}{$[1..9]$-th matched \regex{()}}
+
+\sectiontitle{Substitutions}
+
+\command{\regex{\$1},\dots,\regex{\$9}}{$[1..9]$-th matched \regex{()}}
+\command{\regex{\$+}}{Last matched \regex{()}}
+\command{\$\&, \&}{Entire matched string (Perl, Vim)}
+\command{\$\`{}, \$\textquotesingle{}}{Text [before, after] match}
+\command{\$\_}{Entire input text}
+
+\sectiontitle{Quantifiers (greedy)}
+
+(Perl/Java/\dnet, Vim without \emph{very magic}):\\
+\command{\re?, \re\bs?}{\re\ optional (0 or 1)}
+\command{\re*}{Any quantity of \re\ (0 or more)}
+\command{\re+, \re\bs+}{At least one of \re\ (1 or more)}
+\command{\re\{n\}, \re\bs\{n\}}{\re\ exactly $n$ times}
+\command{\re\{n,\}, \re\bs\{n,\}}{\re\ at least $n$ times}
+\command{\re\{n,m\}, \re\bs\{n,m\}}{\re\ at least $n$ and at most $m$ times}
+
+\sectiontitle{Quantifiers (lazy)}
+
+(Perl/Java/\dnet, Vim without \emph{very magic}):\\
+\command{\re??, \re\bs\{-,1\}}{\re\ optional (0 or 1)}
+\command{\re*?, \re\bs\{-\}}{Any quantity of \re\ (0 or more)}
+\command{\re+?, \re\bs\{-1,\}}{At least one of \re\ (1 or more)}
+\command{\re\{n\}?, \re\bs\{-n\}}{\re\ exactly $n$ times}
+\command{\re\{n,\}?, \re\bs\{-n,\}}{\re\ at least $n$ times}
+\command{\re\{n,m\}?, \bs\{-n,m\}}{\re\ at least $n$ and at most $m$ times}
+
+\end{col2}
+
+\begin{col3}
+
+\sectiontitle{Alternation (branching)}
+
+``\re\ or \re\ or \dots''.
+In NFA engines alternatives are tried in order of appearance.\\
+\command{\re|\re}{Perl, Java, \dnet}
+\command{\re\bs|\re}{Vim without \emph{very magic}}
+
+\sectiontitle{Shorthands}
+
+\command{\bs{}s}{White space (space, tab, etc.)\textsuperscript{$\dagger$}}
+\command{\bs{}S}{Not \regex{\bs{}s}}
+\command{\bs{}d}{Digit (\regex{[0-9]})\textsuperscript{$\dagger$}}
+\command{\bs{}D}{Not \regex{\bs{}d}}
+\command{\bs{}w}{Word char (\regex{[a-zA-Z0-9\_]})\textsuperscript{$\dagger$}}
+\command{\bs{}W}{Not \regex{\bs{}w}}
+\command{\bs{}t, \bs{}n}{Tab, New line}
+
+\begin{cheatnote}
+$\dagger$ Some flavours also recognise special Unicode characters in the same character group.\\
+In Vim \regex{\bs\_s} also includes new line.\\
+\end{cheatnote}
+
+\sectiontitle{Modes and Flags}
+
+\command{i}{Ignore case\textsuperscript{$\dagger$} (Perl/Vim)}
+\command{m}{Multi-line mode (Perl)}
+\command{s}{Dot matches new line\textsuperscript{$\ddagger$} (Perl)}
+\command{x}{Ignore white space\textsuperscript{\textsection} (Perl)}
+\command{g}{Apply substitution in all occurrences (Perl/Vim)}
+
+\begin{cheatnote}
+$\dagger$ Java: \code{Pattern.CASE\_INSENSITIVE},\\
+\dnet: \code{RegexOptions.IgnoreCase}.
+\end{cheatnote}
+$\ddagger$ In Vim, use \regex{\bs\_.} to make dot match new lines.\\
+\begin{cheatnote}
+\textsection\ Java: \code{Pattern.COMMENTS},\\
+\dnet: \code{RegexOptions.IgnorePatternWhiteSpace}.
+\end{cheatnote}
+
+\end{col3}
+\end{cheatsheet}
+
+\newpage
+
+\begin{cheatsheet}{Regular Expressions Advanced}
+
+\begin{col1}
+
+\sectiontitle{Lookaround}
+
+\emph{Lookahead} = Check if \re\ matches at current position, but do not consume.\\
+\emph{Lookbehind} = Check if \re\ matches just before what follows, but do not consume.\\
+\emph{Negative} = Check if \re\ does \emph{not} match.\\
+
+(Perl/Java/\dnet, Vim):\\
+\command{(?=\re), \re\bs{}@=}{Lookahead}
+\command{(?!\re), \re\bs{}@!}{Negative lookahead}
+\command{(?<=\re), \re\bs{}@<=}{Lookbehind}
+\command{(?<!\re), \re\bs{}@<!}{Negative lookbehind}
+
+\sectiontitle{Non-capturing parentheses and comments}
+
+Group as a unit, but do not capture for backreferencing.\\
+\command{(?:\re)}{Perl, Java, \dnet}
+\command{\bs\%(\re\bs)}{Vim}
+
+\command{(?\#\emph{free text})}{Comment inside regex}
+
+\sectiontitle{Branch reset}
+
+\command{(?|\re)}{Restart group numbering for each branch in \re}
+
+Not available in Vim.\\
+
+\end{col1}
+
+\begin{col2}
+
+\sectiontitle{Named captures}
+
+\command{(?<\emph{name}>\re)}{Capture \re\ under \emph{name}}
+\command{\bs{}k<\emph{name}>}{Named backreference}
+\command{\$+\{\emph{name}\}}{Named substitution (Perl)}
+\command{\$\{\emph{name}\}}{Named substitution (\dnet)}
+
+Not available in Vim.\\
+
+\sectiontitle{Atomic grouping}
+
+Match \re\ without retry. In a NFA engine, discard all the possible backtracking
+states for the enclosed \re.\\
+
+\command{(?>\re)}{Perl/Java/\dnet}
+\command{\re\bs{}@>}{Vim}
+
+\sectiontitle{Possessive quantifiers}
+
+\command{\re?+}{\regex{(?>\re?)}}
+\command{\re*+}{\regex{(?>\re*)}}
+\command{\re++}{\regex{(?>\re+)}}
+\command{\re\{n,m\}+}{\regex{(?>\re\{n,m\})}}
+
+Not available in Vim (but can be done with atomic grouping).\\
+
+\sectiontitle{End of previous match}
+
+\command{\bs{}G}{Matches where the previous match ended}
+Useful when using the \regex{g} mode.\\
+In Perl, use \code{pos(\$str)} to know the current location where
+\regex{\bs{}G} would match in \code{\$str}.\\
+Not available in Vim.
+
+\end{col2}
+
+\begin{col3}
+
+\sectiontitle{Conditional expressions}
+
+If \emph{cond} then \re1, else \re2. \re2 is optional.\\
+
+Perl/Java/\dnet:\\
+\command{(?(\emph{cond})\re)}{Without \emph{else} \re}
+\command{(?(\emph{cond})\re1|\re2)}{With \emph{else} \re}
+\command{(?(\emph{n})$\cdots$)}{\emph{cond} = $n$-th \regex{()} matched}
+
+\emph{cond} can be a \emph{lookaround} expression (see the examples).\\
+Not available in Vim.\\
+
+\sectiontitle{Dynamic regex and embedded code}
+
+\command{(??\{\emph{code}\})}{Match \re\ built by \emph{code} here}
+\command{(?\{\emph{code}\})}{\emph{code} that does anything}
+Useful for debugging regex by \texttt{print}ing.\\
+
+Not available in Vim.\\
+
+\sectiontitle{Recursive expressions}
+
+\command{(?R)}{Repeat entire \re\ here}
+\command{(?R\emph{n})}{Repeat \re\ captured under group $n$ here}
+
+Not available in Vim.\\
+
+\sectiontitle{Mode modifiers}
+
+(Perl/Java/\dnet, Vim):\\
+\command{(?i), \bs{}c}{Turn case-insensitive on}
+\command{(?-i), \bs{}C}{Turn case-insensitive off}
+\command{(?i:\re)}{Be case insensitive for \re}
+
+\end{col3}
+
+\end{cheatsheet}
+
+\newpage
+
+\begin{cheatsheet}{Regular Expressions and Characters}
+
+\begin{col1}
+
+\sectiontitle{Unicode properties}
+
+Perl/Java/\dnet:\\
+\command{\bs{}p\{L\}}{Letters}
+\command{\bs{}p\{M\}}{Accent marks, etc.}
+\command{\bs{}p\{Z\}}{Spaces, etc.}
+\command{\bs{}p\{S\}}{Dingbats and symbols}
+\command{\bs{}p\{N\}}{Numeric characters}
+\command{\bs{}p\{P\}}{Punctuation characters}
+\command{\bs{}p\{C\}}{Everything else}
+
+\sectiontitle{Unicode sub-properties}
+
+\command{\bs{}p\{Ll\}}{Lower-case letters}
+\command{\bs{}p\{Lu\}}{Upper-case letters}
+\command{\bs{}p\{Mn\}}{Non-spacing mark (accents, \dots)}
+\command{\bs{}p\{Sm\}}{Math symbol ($-$,$+$,$\div$,$\leq$,\dots)}
+\command{\bs{}p\{Sc\}}{Currency symbol (\textyen,\textcent,\texteuro,\textdollar,\textsterling,\dots)}
+\command{\bs{}p\{Nd\}}{Decimal digit}
+\command{\bs{}p\{Nl\}}{Letter number (mostly Roman numerals)}
+\command{\bs{}p\{Pd\}}{Dash punctuation}
+\command{\bs{}p\{Ps\}}{Open punctuation ([, \{, $\lAngle$, \dots)}
+\command{\bs{}p\{Pe\}}{Close punctuation (], \}, $\rAngle$, \dots)}
+\command{\bs{}p\{Cc\}}{ASCII and Latin-1 control characters (\texttt{TAB}, \texttt{CR}, \texttt{LF}, \dots)}
+
+\sectiontitle{Unicode negated properties}
+
+\command{\bs{}P\{$\cdots$\}}{Perl/Java/\dnet}
+\command{\bs{}p\{\^{}$\cdots$\}}{Perl}
+
+\end{col1}
+
+\begin{col2}
+
+\sectiontitle{Unicode blocks and scripts}
+
+\command{\bs{}p\{InCyrillic\}}{Cyrillic character (Perl, Java)}
+\command{\bs{}p\{IsCyrillic\}}{Cyrillic character (\dnet)}
+\command{\bs{}p\{Latin\}}{Latin character}
+\command{\bs{}p\{Greek\}}{Greek character}
+\command{\bs{}p\{Hebrew\}}{Hebrew character}
+
+\sectiontitle{POSIX character classes}
+
+\command{[:alnum:]}{Alphanumeric characters}
+\command{[:alpha:]}{Alphabetic characters}
+\command{[:blank:]}{Space and tab}
+\command{[:cntrl:]}{Control characters}
+\command{[:digit:]}{Numeric characters}
+\command{[:graph:]}{Non-blank characters}
+\command{[:lower:]}{Lower-case alphabetic characters}
+\command{[:print:]}{\regex{[:graph:]} and the space character}
+\command{[:punct:]}{Punctuation characters}
+\command{[:space:]}{All whitespace characters}
+\command{[:upper:]}{Upper-case alphabetic characters}
+\command{[:xdigit:]}{Hexadecimal digits (\regex{[0-9a-fA-F]})}
+
+\sectiontitle{POSIX collating sequences}
+
+\command{[.span-ll.]}{Match ``ll'' as single character}
+\command{[.ch.]}{Match ``ch'' as single character}
+\command{[.eszet.]}{Match ``ss'' (``ß'') as single character}
+
+\sectiontitle{POSIX character equivalents}
+
+\command{[[=a=][=n=]]}{Character \emph{equivalents} for \emph{a} and \emph{n} (a, á, à, ä, \dots, n, ñ, \dots)}
+
+\end{col2}
+
+\begin{col3}
+
+\sectiontitle{Special characters and other shorthands}
+
+\command{\bs\textit{char}}{Literal \textit{char}}
+\command{\bs{}t}{Tab (\texttt{HT, TAB})}
+\command{\bs{}n}{New line (\texttt{LF, NL})}
+\command{\bs{}r}{Carriage return (\texttt{CR})}
+\command{\bs{}f}{Form feed (\texttt{FF})}
+\command{\bs{}a}{Alarm (\texttt{BEL})}
+\command{\bs{}e}{Escape (think troff) (\texttt{ESC})}
+\command{\$\$}{Literal \$ (\dnet)}
+\command{\bs{}l}{Lower-case next char}
+\command{\bs{}u}{Upper-case next char}
+\command{\bs{}L\emph{text}\bs{}E}{Lower-case \emph{text}}
+\command{\bs{}U\emph{text}\bs{}E}{Upper-case \emph{text}}
+\command{\bs\emph{num}}{Octal escape}
+\command{\bs{}x\emph{num}, \bs{}x\{\emph{num}\}}{Hex escape}
+\command{\bs{}u\emph{num}, \bs{}U\emph{num}}{Unicode escape}
+\command{\bs{}c\emph{x}, \bs{}c\emph{X}}{\texttt{CTRL-\emph{X}}}
+\command{\bs{}N\{\emph{U+263D}\}}{Unicode character}
+\command{\bs{}N\{\emph{name}\}}{Character by Unicode \emph{name}}
+
+\sectiontitle{Class set operations}
+
+\command{[[a-z]\&\&[\^{}aeiou]]}{Class 1 except class 2 (Java)}
+\command{[[a-z]-[aeiou]]}{Class 1 except class 2 (\dnet)}
+
+\end{col3}
+
+\end{cheatsheet}
+
+\newpage
+
+\begin{cheatsheet}{Regular Expressions Examples 1}
+
+\begin{col1}
+
+\sectiontitle{Conditional expressions}
+
+\begin{itemize}
+	\item Backreference as condition: Match a word optionally wrapped in \code{<$\cdots$>}:\\
+	\regex{\input{./cond_backref.tex}}
+	\item Lookaround as condition: Check for number only if prefixed with ``\code{NUM:}'':\\
+	\regex{\input{./cond_lookaround.tex}}
+\end{itemize}
+
+\sectiontitle{Branch reset}
+
+Always capture the number under \regex{\bs{}1} (or \regex{\$1}):\\
+\regex{\input{./branch_reset.tex}}
+
+\sectiontitle{Match continuation line}
+
+Match a single ``logical'' line split into multiple lines by adding \regex{\bs}
+at the end of each split. Example:\\
+\texttt{%
+\mbox{}\ \ SRC=a.c b.c c.c \bs\\
+\mbox{}\ \ \ \ \ \ d.c e.c}
+
+\regex{\input{./cont_line.tex}}
+
+\end{col1}
+
+\begin{col2}
+
+\sectiontitle{Extract file name from path}
+
+Perl:\\
+\regex{\input{./extract_filename.tex}}\\
+
+\sectiontitle{Adding thousand separators to a number}
+
+Using lookaround:\\
+\regex{\input{./thousandsep_1.tex}}\\
+
+Without using lookaround (in Perl):\\
+\regex{\input{./thousandsep_2.tex}}\\
+
+\sectiontitle{Fix floating-point problems}
+
+Use at most $3$ decimal places. Change numbers like $3.27600000002828$ into
+$3.276$; or $4.120000000034$ into $4.12$:\\
+\regex{\input{./fixfloat.tex}}\\
+
+\end{col2}
+
+\begin{col3}
+
+\sectiontitle{Match a date (month and day)}
+
+\regex{\input{./date.tex}}\\
+
+\sectiontitle{Match time (am/pm)}
+
+\regex{\input{./time12.tex}}\\
+
+\sectiontitle{Match time (24 hours)}
+
+\regex{\input{./time24_1.tex}}\\
+or\\
+\regex{\input{./time24_2.tex}}\\
+
+\end{col3}
+
+\end{cheatsheet}
+
+\newpage
+
+\begin{cheatsheet}{Regular Expressions Examples 2}
+
+\begin{col1}
+
+\sectiontitle{Match IP address}
+
+Using Perl regex object for clarity:\\
+\regex{\input{./ip.tex}}\\
+
+\sectiontitle{Match closing XML tag}
+
+Using lazy quantifier:\\
+\regex{\input{./matchclosetag_lazy.tex}}\\
+
+Using greedy quantifier:\\
+\regex{\input{./matchclosetag_greedy.tex}}\\
+
+\end{col1}
+
+\begin{col2}
+
+\sectiontitle{Match a URL}
+
+\regex{\input{./url.tex}}\\
+
+\sectiontitle{Match an email address}
+
+\regex{\input{./email_addr.tex}}
+
+\end{col2}
+
+\begin{col3}
+
+\sectiontitle{Balanced parentheses (static)}
+
+Match up to $n$ levels of nested parentheses:\\
+\regex{\input{./balanced_paren_static.tex}}\\
+
+\sectiontitle{Balanced parentheses (dynamic)}
+
+Match a function call with balanced parentheses:\\
+\regex{\input{./balanced_paren_dynamic.tex}}\\
+
+\end{col3}
+
+\end{cheatsheet}
+
+\newpage
+
+\begin{cheatsheet}{Regular Expressions Usage in Programming Languages and Tools}
+
+\begin{col1}
+
+\sectiontitle{Perl}
+
+\begin{small}
+	\texttt{\input{./example_perl.tex}}
+\end{small}
+
+\end{col1}
+
+\begin{col2}
+
+\sectiontitle{Java}
+
+\begin{small}
+	\texttt{\input{./example_java.tex}}
+\end{small}
+
+\sectiontitle{Python}
+
+\begin{small}
+	\texttt{\input{./example_python.tex}}
+\end{small}
+
+\end{col2}
+
+\begin{col3}
+
+\sectiontitle{\dnet\ (C\#)}
+
+\begin{small}
+	\texttt{\input{./example_dnet.tex}}
+\end{small}
+
+\sectiontitle{Automated editing}
+
+\texttt{sed~-i~.old -E \textquotesingle{}s/\re/\dots/g\textquotesingle\ file}\\
+\texttt{perl~-p~-i~.old -e \textquotesingle{}s/\re/\dots/g\textquotesingle\ file}\\
+
+\end{col3}
+
+\end{cheatsheet}
+
+\end{document}
