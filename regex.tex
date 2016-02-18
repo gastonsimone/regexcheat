@@ -448,6 +448,13 @@ or\\
 
 \begin{col1}
 
+\sectiontitle{Parse a CSV file}
+
+This regex matches each field in a CSV line, supporting fields with or without
+surrounding double-quotes. In the former case, a double quote is represented by
+a pair of double quotes:\\
+\regex{\input{./parse_csv.tex}}\\
+
 \sectiontitle{Match IP address}
 
 Using Perl regex object for clarity:\\
