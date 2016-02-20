@@ -19,6 +19,8 @@ SRC = $(TARGET).tex \
 	  $(REGEX_SRC)
 
 .PHONY: open zip gzip clean
+.INTERMEDIATE: $(EXAMPLES) \
+			   $(REGEX_SRC)
 
 $(TARGET).pdf: $(TARGET).ps
 	$(PSPDF) $<
@@ -54,4 +56,4 @@ gzip: $(TARGET).pdf
 	gzip -c $< > $(TARGET).pdf.gz
 
 clean:
-	$(RM) *.log *.out *.aux *.dvi *.ps *.pdf *.zip *.gz $(EXAMPLES) $(REGEX_SRC)
+	$(RM) *.log *.out *.aux *.dvi *.ps *.pdf *.zip *.gz
