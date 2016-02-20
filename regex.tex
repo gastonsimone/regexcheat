@@ -107,10 +107,11 @@ $\dagger$ Perl/Java/\dnet:\\
 
 \sectiontitle{Alternation (branching)}
 
-``\re\ or \re\ or \dots''.
-In NFA engines alternatives are tried in order of appearance.\\
-\command{\re|\re}{Perl, Java, \dnet}
-\command{\re\bs|\re}{Vim without \emph{very magic}}
+\command{\re|\re}{\re\ or \re\ (Perl/Java/\dnet)}
+\command{\re\bs|\re}{\re\ or \re\ (Vim without \emph{very magic})}
+\emph{Note:} In NFA engines alternatives are tried in order of appearance. So
+placing them in probability order prevents backtracking, improving
+efficiency.\\
 
 \sectiontitle{Shorthands}
 
@@ -121,7 +122,6 @@ In NFA engines alternatives are tried in order of appearance.\\
 \command{\bs{}w}{Word char (\regex{[a-zA-Z0-9\_]})\textsuperscript{$\dagger$}}
 \command{\bs{}W}{Not \regex{\bs{}w}}
 \command{\bs{}t, \bs{}n}{Tab, New line}
-
 \begin{cheatnote}
 $\dagger$ Some flavours also recognise special Unicode characters in the same character group.\\
 In Vim \regex{\bs\_s} also includes new line.\\
@@ -372,6 +372,11 @@ Perl/Java/\dnet:\\
 \begin{cheatsheet}{Regular Expressions Examples 1}
 
 \begin{col1}
+
+\sectiontitle{Match quoted string with escaped quotes}
+
+\regex{\input{./quoted_string.tex}}\\
+\emph{Note:} Putting the most common case (non-escaped characters) first prevents backtracking, improving efficiency.\\
 
 \sectiontitle{Conditional expressions}
 
