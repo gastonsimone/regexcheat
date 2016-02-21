@@ -3,7 +3,8 @@ using System.Text.RegularExpressions;
 string text;
 
 // Extract subject
-Regex re = new Regex("^Subject: (.*)",
+Regex re = new Regex(
+		"^Subject: (.*)",
 		RegexOptions.IgnoreCase);
 Match m = re.Match(text);
 

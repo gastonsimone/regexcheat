@@ -3,7 +3,8 @@ import java.util.regex.*;
 String text;
 
 // Extract subject
-Pattern re = Pattern.compile("^Subject: (.*)",
+Pattern re = Pattern.compile(
+		"^Subject: (.*)",
 		Pattern.CASE_INSENSITIVE);
 Matcher m = re.matcher(text);
 

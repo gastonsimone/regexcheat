@@ -3,24 +3,20 @@ DVIPS = dvips
 PSPDF = ps2pdf
 RM = rm -f
 
-VPATH = regex_examples:src_examples
+VPATH = regex_examples
 
 TARGET = regex
-EXAMPLES = example_perl.tex \
-		   example_java.tex \
-		   example_dnet.tex \
-		   example_python.tex
+SRC_EXAMPLES = $(wildcard src_examples/*)
 REGEX_EXAMPLES = $(notdir $(wildcard regex_examples/*.regex))
 REGEX_SRC = $(patsubst %.regex,%.tex,$(REGEX_EXAMPLES))
 SRC = $(TARGET).tex \
 	  cheatsheet.sty \
 	  escape_regex.sed \
-	  $(EXAMPLES) \
+	  $(SRC_EXAMPLES) \
 	  $(REGEX_SRC)
 
 .PHONY: open zip gzip clean
-.INTERMEDIATE: $(EXAMPLES) \
-			   $(REGEX_SRC)
+.INTERMEDIATE: $(REGEX_SRC)
 
 $(TARGET).pdf: $(TARGET).ps
 	$(PSPDF) $<
@@ -33,18 +29,6 @@ $(TARGET).dvi: $(SRC)
 
 $(REGEX_SRC): %.tex: %.regex
 	sed -f escape_regex.sed $< > $@
-
-example_java.tex: example.java
-	source-highlight -t4 -f latexcolor -i $< -o $@
-
-example_perl.tex: finddbl.pl
-	source-highlight -t4 -s perl -f latexcolor -i $< -o $@
-
-example_dnet.tex: example.cs
-	source-highlight -t4 -f latexcolor -i $< -o $@
-
-example_python.tex: example.py
-	source-highlight -t4 -f latexcolor -i $< -o $@
 
 open: $(TARGET).pdf
 	open $<

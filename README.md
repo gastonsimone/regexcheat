@@ -29,7 +29,6 @@ After cloning this repository, you will need the following tools to build the do
 
 * [make](https://en.wikipedia.org/wiki/Make_%28software%29) (You will need the [GNU version](https://www.gnu.org/software/make/make.html), which is the default in GNU/Linux and Mac OS X)
 * [sed](https://en.wikipedia.org/wiki/Sed) (both GNU and BSD versions should work)
-* [GNU Source-highlight](http://www.gnu.org/software/src-highlite/)
 * [TeXLive](https://www.tug.org/texlive/)
 
 Once you have all this, just run:

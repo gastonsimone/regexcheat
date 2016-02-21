@@ -10,6 +10,42 @@
 \usepackage[dvipsnames]{xcolor} % Required for source-highlight coloured output
 \usepackage{textcomp} % Required for \textquotesingle
 
+\usepackage{listings} % Required for inserting code snippets
+%\usepackage[usenames,dvipsnames]{color} % Required for specifying custom colors and referring to colors by name
+
+\definecolor{DarkGreen}{rgb}{0.0,0.4,0.0} % Comment color
+\definecolor{highlight}{RGB}{255,251,204} % Code highlight color
+
+\lstloadlanguages{Perl,Java,[Sharp]C,Python}
+\lstdefinestyle{SourceCode}{
+backgroundcolor=\color{highlight},
+basicstyle=\footnotesize\ttfamily,
+breakatwhitespace=false,
+breaklines=true, % Automatic line breaking (prevents code from protruding outside the box)
+captionpos=b,
+commentstyle=\color{DarkGreen}, % Style of comments within the code
+deletekeywords={}, % If you want to delete any keywords from the current language separate them by commas
+%escapeinside={\%}, % This allows you to escape to LaTeX using the character in the bracket
+firstnumber=1, % Line numbers begin at line 1
+frame=single, % Frame around the code box, value can be: none, leftline, topline, bottomline, lines, single, shadowbox
+frameround=tttt, % Rounds the corners of the frame for the top left, top right, bottom left and bottom right positions
+keywordstyle=\color{Blue}\bf, % Functions are bold and blue
+morekeywords={}, % Add any functions no included by default here separated by commas
+numbers=none, % Location of line numbers, can take the values of: none, left, right
+numbersep=10pt, % Distance of line numbers from the code box
+numberstyle=\tiny\color{Gray}, % Style used for line numbers
+rulecolor=\color{black}, % Frame border color
+showstringspaces=false, % Don't put marks in string spaces
+showtabs=false, % Display tabs in the code as lines
+stepnumber=5, % The step distance between line numbers, i.e. how often will lines be numbered
+stringstyle=\color{Purple}, % Strings are purple
+tabsize=2, % Number of spaces per tab in the code
+}
+\lstdefinestyle{Perl}{language=Perl,style=SourceCode}
+\lstdefinestyle{Java}{language=Perl,style=SourceCode,morecomment=[l]{//}}
+\lstdefinestyle{CSharp}{language=[Sharp]C,style=SourceCode}
+\lstdefinestyle{Python}{language=Python,style=SourceCode}
+
 \usepackage[% This block contains information used to annotate the PDF
 	colorlinks=false,
 	pdftitle={Regular Expressions},
@@ -23,6 +59,7 @@
 \newcommand{\bs}{\textbackslash}
 \newcommand{\re}{\textit{re}}
 \newcommand{\dnet}{{.}Net}
+\newcommand{\insertcode}[2]{\lstinputlisting[label=#2,style=#1]{#2}}
 
 \begin{document}
 
@@ -511,9 +548,7 @@ Match a function call with balanced parentheses:\\
 
 \sectiontitle{Perl}
 
-\begin{small}
-	\texttt{\input{./example_perl.tex}}
-\end{small}
+\insertcode{Perl}{./src_examples/finddbl.pl}
 
 \end{col1}
 
@@ -521,15 +556,12 @@ Match a function call with balanced parentheses:\\
 
 \sectiontitle{Java}
 
-\begin{small}
-	\texttt{\input{./example_java.tex}}
-\end{small}
+\insertcode{Java}{./src_examples/example.java}
+\mbox{}% Used to leave some vertical space
 
 \sectiontitle{Python}
 
-\begin{small}
-	\texttt{\input{./example_python.tex}}
-\end{small}
+\insertcode{Python}{./src_examples/example.py}
 
 \end{col2}
 
@@ -537,9 +569,8 @@ Match a function call with balanced parentheses:\\
 
 \sectiontitle{\dnet\ (C\#)}
 
-\begin{small}
-	\texttt{\input{./example_dnet.tex}}
-\end{small}
+\insertcode{CSharp}{./src_examples/example.cs}
+\mbox{}% Used to leave some vertical space
 
 \sectiontitle{Automated editing}
 
