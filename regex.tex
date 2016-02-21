@@ -16,7 +16,7 @@
 \definecolor{DarkGreen}{rgb}{0.0,0.4,0.0} % Comment color
 \definecolor{highlight}{RGB}{255,251,204} % Code highlight color
 
-\lstloadlanguages{Perl,Java,[Sharp]C,Python}
+\lstloadlanguages{Perl,Java,[Sharp]C,Python,bash}
 \lstdefinestyle{SourceCode}{
 backgroundcolor=\color{highlight},
 basicstyle=\footnotesize\ttfamily,
@@ -45,6 +45,7 @@ tabsize=2, % Number of spaces per tab in the code
 \lstdefinestyle{Java}{language=Perl,style=SourceCode,morecomment=[l]{//}}
 \lstdefinestyle{CSharp}{language=[Sharp]C,style=SourceCode}
 \lstdefinestyle{Python}{language=Python,style=SourceCode}
+\lstdefinestyle{Bash}{language=bash,style=SourceCode,morekeywords={perl}}
 
 \usepackage[% This block contains information used to annotate the PDF
 	colorlinks=false,
@@ -574,8 +575,7 @@ Match a function call with balanced parentheses:\\
 
 \sectiontitle{Automated editing}
 
-\texttt{sed~-i~.old -E \textquotesingle{}s/\re/\dots/g\textquotesingle\ file}\\
-\texttt{perl~-p~-i~.old -e \textquotesingle{}s/\re/\dots/g\textquotesingle\ file}\\
+\insertcode{Bash}{./src_examples/commands.sh}
 
 \end{col3}
 
