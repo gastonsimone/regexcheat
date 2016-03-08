@@ -11,7 +11,6 @@
 \usepackage{textcomp} % Required for \textquotesingle
 
 \usepackage{listings} % Required for inserting code snippets
-%\usepackage[usenames,dvipsnames]{color} % Required for specifying custom colors and referring to colors by name
 
 \definecolor{DarkGreen}{rgb}{0.0,0.4,0.0} % Comment color
 \definecolor{highlight}{RGB}{255,251,204} % Code highlight color
@@ -48,7 +47,8 @@ tabsize=2, % Number of spaces per tab in the code
 \lstdefinestyle{Bash}{language=bash,style=SourceCode,morekeywords={perl}}
 
 \usepackage[% This block contains information used to annotate the PDF
-	colorlinks=false,
+	colorlinks=true,
+	urlcolor=blue,
 	pdftitle={Regular Expressions},
 	pdfauthor={Gastón Simone},
 	pdfsubject={Regular Expressions cheatsheet},
@@ -56,6 +56,8 @@ tabsize=2, % Number of spaces per tab in the code
 ]{hyperref}
 
 \newcommand{\regex}[1]{\texttt{#1}}
+\newcommand{\cregex}[1]{\colorbox{gray!30}{\regex{#1}}}
+\renewcommand{\cmdleft}[1]{\cregex{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
 \newcommand{\bs}{\textbackslash}
 \newcommand{\re}{\textit{re}}
@@ -402,6 +404,57 @@ Perl/Java/\dnet:\\
 \command{[[a-z]-[aeiou]]}{Class 1 except class 2 (\dnet)}
 
 \end{col3}
+
+\end{cheatsheet}
+
+\newpage
+
+\begin{cheatsheet}{Regular Expressions Efficiency}
+
+\begin{col1}
+
+\sectiontitle{General guidelines}
+\begin{itemize}
+	\item Avoid recompiling.
+	\item Use non-capturing parentheses (but check they are indeed faster in
+		your case!).
+	\item Split into multiple regular expressions (or literal text search) if
+		it can make the process faster.
+	\item Use leading anchors (\cregex{\^{}}, \cregex{\bs{}A}, \cregex{\$},
+		\cregex{\bs{}Z}, etc.) to reduce the number of locations where the
+		\re{} is tried.
+	\item Use atomic grouping and possessive quantifiers to avoid unnecessary
+		backtracking (especially in non-matching cases).
+	\item Put the most-likely alternatives first (only for traditional NFA
+		engines).
+\end{itemize}
+
+\sectiontitle{Lazy quantifiers are slower than greedy ones}
+
+Because they must jump between checking what the quantifier controls with
+checking what comes after. Example: \cregex{"(.*?)"}.
+
+\end{col1}
+
+\begin{col2}
+
+Notation: $worse\to better$
+
+\sectiontitle{Expose literal text}
+
+\cregex{this|that} $\to$ \cregex{th(?:is|at)}.\\
+\cregex{-\{5,7\}} $\to$ \cregex{------\{0,2\}}.\\
+The engine can use a fast substring search (like the
+\href{https://en.wikipedia.org/wiki/Boyer–Moore_string_search_algorithm}{Boyer-Moore algorithm}) to
+find the literal text (i.e. \cregex{th}) and then match the rest of the \re.\\
+
+\sectiontitle{Expose anchors}
+
+\cregex{\^{}this|\^{}that} $\to$ \cregex{\^{}(?:this|that)}.\\
+\cregex{abc\$|123\$} $\to$ \cregex{(?:abc|123)\$} (only affects Perl).\\
+\re{} only tried at places where the anchor (i.e. \cregex{\^{}}) matches.\\
+
+\end{col2}
 
 \end{cheatsheet}
 

@@ -18,8 +18,9 @@ The document is divided in the following sections:
 1. **Basics** (a cheatsheet)
 2. **Advanced** (another cheatsheet)
 3. **Special Characters** (another, very specific, cheatsheet)
-4. **Examples** (two pages of very useful examples for real-life problems)
-5. **Usage in Programming Languages and Tools** (examples on different languages and tools)
+4. **Efficiency** (another cheatsheet, focused on efficiency)
+5. **Examples** (two pages of very useful examples for real-life problems)
+6. **Usage in Programming Languages and Tools** (examples on different languages and tools)
 
 If you want to really understand what is shown in this document (and much more!) you have to read Friedl's book.
 

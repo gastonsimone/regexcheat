@@ -12,7 +12,9 @@
 \newcommand{\sectiontitle}[1]{\paragraph{#1} \ \\}
 
 % Custom command for adding a shortcut
-\newcommand{\command}[2]{\regex{#1}~\dotfill{}~#2\\}
+\newcommand{\cmdleft}[1]{#1} % renew to customize
+\newcommand{\cmdright}[1]{#1} % renew to customize
+\newcommand{\command}[2]{\cmdleft{#1}~\dotfill{}~\cmdright{#2}\\}
 
 \newenvironment{cheatsheet}[1]{
 \begin{picture}(297,210) % Create a container for the page content
