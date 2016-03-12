@@ -139,7 +139,7 @@ $\dagger$ Perl/Java/\dnet:\\
 \command{\re+?, \re\bs\{-1,\}}{At least one of \re\ (1 or more)}
 \command{\re\{n\}?, \re\bs\{-n\}}{\re\ exactly $n$ times}
 \command{\re\{n,\}?, \re\bs\{-n,\}}{\re\ at least $n$ times}
-\command{\re\{n,m\}?, \bs\{-n,m\}}{\re\ at least $n$ and at most $m$ times}
+\command{\re\{n,m\}?, \re\bs\{-n,m\}}{\re\ between $n$ and $m$ times}
 
 \end{col2}
 
@@ -415,24 +415,25 @@ Perl/Java/\dnet:\\
 
 \sectiontitle{General guidelines}
 \begin{itemize}
-	\item Avoid recompiling.
+	\item Avoid recompiling the \re.
 	\item Use non-capturing parentheses (but check they are indeed faster in
 		your case!).
-	\item Split into multiple regular expressions (or literal text search) if
+	\item Split into multiple \re's (or literal text search) if
 		it can make the process faster.
 	\item Use leading anchors (\cregex{\^{}}, \cregex{\bs{}A}, \cregex{\$},
 		\cregex{\bs{}Z}, etc.) to reduce the number of locations where the
-		\re{} is tried.
+		\re{} is evaluated.
 	\item Use atomic grouping and possessive quantifiers to avoid unnecessary
-		backtracking (especially in non-matching cases).
-	\item Put the most-likely alternatives first (only for traditional NFA
+		backtracking (especially important in non-matching cases).
+	\item Put the most-likely alternatives first (only affects traditional NFA
 		engines).
 \end{itemize}
 
-\sectiontitle{Lazy quantifiers are slower than greedy ones}
+\sectiontitle{Lazy quantifiers may be slower than greedy ones}
 
 Because they must jump between checking what the quantifier controls with
-checking what comes after. Example: \cregex{"(.*?)"}.
+checking what comes after. Example: \cregex{"(.*?)"} to match a double-quoted
+string. Compare with the example in the next page.
 
 \end{col1}
 
@@ -465,7 +466,8 @@ Useful to optimise pattern with the following structure:
 \cregex{opening normal*(?:special normal*)* closing},\\
 where \regex{opening}, \regex{normal}, \regex{special} and \regex{closing} are
 all regular expressions. It can be used to optimise any number of alternatives,
-like in \cregex{(\re{}1|\re{}2|\dots)*}. \textbf{Notes:}
+like in \cregex{(\re{}1|\re{}2|\dots)*}.\\
+\textbf{Notes:}
 \begin{enumerate}
 	\item \regex{normal} should be the most common case
 	\item the start of \regex{normal} and \regex{special} must not match at the
@@ -486,28 +488,29 @@ like in \cregex{(\re{}1|\re{}2|\dots)*}. \textbf{Notes:}
 
 \sectiontitle{Match quoted string with escaped quotes}
 
-\regex{\input{./quoted_string.tex}}\\
-\emph{Note:} Putting the most common case (non-escaped characters) first prevents backtracking, improving efficiency.\\
-Loop-unrolling version:
-\regex{\input{./quoted_string_lu.tex}}\\
+\cregex{\input{./quoted_string.tex}}\\
+\emph{Note:} Possessive quantifiers prevent very long execution times (due to
+the nested quantifiers \cregex{+} and \cregex{*}) when there is no matching.\\
+Loop-unrolling version:\\
+\cregex{\input{./quoted_string_lu.tex}}\\
 
 \sectiontitle{Conditional expressions}
 
 \begin{itemize}
 	\item Backreference as condition: Match a word optionally wrapped in \code{<$\cdots$>}:\\
-	\regex{\input{./cond_backref.tex}}
+	\cregex{\input{./cond_backref.tex}}
 	\item Lookaround as condition: Check for number only if prefixed with ``\code{NUM:}'':\\
-	\regex{\input{./cond_lookaround.tex}}
+	\cregex{\input{./cond_lookaround.tex}}
 \end{itemize}
 
 \sectiontitle{Branch reset}
 
-Always capture the number under \regex{\bs{}1} (or \regex{\$1}):\\
-\regex{\input{./branch_reset.tex}}
+Always capture the number under \cregex{\bs{}1} (or \cregex{\$1}):\\
+\cregex{\input{./branch_reset.tex}}
 
 \sectiontitle{Match continuation line}
 
-Match a single ``logical'' line split into multiple lines by adding \regex{\bs}
+Match a single ``logical'' line split into multiple lines by adding \cregex{\bs}
 at the end of each split. Example:\\
 \texttt{%
 \mbox{}\ \ SRC=a.c b.c c.c \bs\\
@@ -527,7 +530,7 @@ Perl:\\
 \sectiontitle{Adding thousand separators to a number}
 
 Using lookaround:\\
-\regex{\input{./thousandsep_1.tex}}\\
+\cregex{\input{./thousandsep_1.tex}}\\
 
 Without using lookaround (in Perl):\\
 \regex{\input{./thousandsep_2.tex}}\\
@@ -536,7 +539,7 @@ Without using lookaround (in Perl):\\
 
 Use at most $3$ decimal places. Change numbers like $3.27600000002828$ into
 $3.276$; or $4.120000000034$ into $4.12$:\\
-\regex{\input{./fixfloat.tex}}\\
+\cregex{\input{./fixfloat.tex}}\\
 
 \end{col2}
 
@@ -548,13 +551,13 @@ $3.276$; or $4.120000000034$ into $4.12$:\\
 
 \sectiontitle{Match time (am/pm)}
 
-\regex{\input{./time12.tex}}\\
+\cregex{\input{./time12.tex}}\\
 
 \sectiontitle{Match time (24 hours)}
 
-\regex{\input{./time24_1.tex}}\\
+\cregex{\input{./time24_1.tex}}\\
 or\\
-\regex{\input{./time24_2.tex}}\\
+\cregex{\input{./time24_2.tex}}\\
 
 \end{col3}
 
@@ -581,10 +584,10 @@ Using Perl regex object for clarity:\\
 \sectiontitle{Match closing XML tag}
 
 Using lazy quantifier:\\
-\regex{\input{./matchclosetag_lazy.tex}}\\
+\cregex{\input{./matchclosetag_lazy.tex}}\\
 
 Using greedy quantifier:\\
-\regex{\input{./matchclosetag_greedy.tex}}\\
+\cregex{\input{./matchclosetag_greedy.tex}}\\
 
 \end{col1}
 
