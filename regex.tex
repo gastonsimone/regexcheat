@@ -446,15 +446,35 @@ Notation: $worse\to better$
 \cregex{-\{5,7\}} $\to$ \cregex{------\{0,2\}}.\\
 The engine can use a fast substring search (like the
 \href{https://en.wikipedia.org/wiki/Boyer–Moore_string_search_algorithm}{Boyer-Moore algorithm}) to
-find the literal text (i.e. \cregex{th}) and then match the rest of the \re.\\
+find the literal text (i.e. \cregex{th}) and then match the rest of the \re.
 
 \sectiontitle{Expose anchors}
 
 \cregex{\^{}this|\^{}that} $\to$ \cregex{\^{}(?:this|that)}.\\
 \cregex{abc\$|123\$} $\to$ \cregex{(?:abc|123)\$} (only affects Perl).\\
-\re{} only tried at places where the anchor (i.e. \cregex{\^{}}) matches.\\
+\re{} only tried at places where the anchor (i.e. \cregex{\^{}}) matches.
 
 \end{col2}
+
+\begin{col3}
+
+\sectiontitle{Loop unrolling}
+
+Useful to optimise pattern with the following structure:
+\cregex{(normal|special)*}. This can be changed to:\\
+\cregex{opening normal*(?:special normal*)* closing},\\
+where \regex{opening}, \regex{normal}, \regex{special} and \regex{closing} are
+all regular expressions. It can be used to optimise any number of alternatives,
+like in \cregex{(\re{}1|\re{}2|\dots)*}. \textbf{Notes:}
+\begin{enumerate}
+	\item \regex{normal} should be the most common case
+	\item the start of \regex{normal} and \regex{special} must not match at the
+		same location.
+	\item \regex{special} must not match the \emph{empty string}.
+	\item \regex{special} must be atomic.
+\end{enumerate}
+
+\end{col3}
 
 \end{cheatsheet}
 
@@ -468,6 +488,8 @@ find the literal text (i.e. \cregex{th}) and then match the rest of the \re.\\
 
 \regex{\input{./quoted_string.tex}}\\
 \emph{Note:} Putting the most common case (non-escaped characters) first prevents backtracking, improving efficiency.\\
+Loop-unrolling version:
+\regex{\input{./quoted_string_lu.tex}}\\
 
 \sectiontitle{Conditional expressions}
 
