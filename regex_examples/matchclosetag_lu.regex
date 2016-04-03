@@ -1,0 +1,8 @@
+<B>               # opening
+    (?>[^<]*)     # any "normal"
+    (?>           # any amount of
+        (?!</?B>) # if not <B> or </B>
+        <         # one "special"
+        [^<]*     # any normal
+    )*
+</B>              # closing

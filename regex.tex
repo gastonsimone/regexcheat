@@ -581,13 +581,9 @@ a pair of double quotes:\\
 Using Perl regex object for clarity:\\
 \regex{\input{./ip.tex}}\\
 
-\sectiontitle{Match closing XML tag}
+\sectiontitle{Match an email address}
 
-Using lazy quantifier:\\
-\cregex{\input{./matchclosetag_lazy.tex}}\\
-
-Using greedy quantifier:\\
-\cregex{\input{./matchclosetag_greedy.tex}}\\
+\regex{\input{./email_addr.tex}}
 
 \end{col1}
 
@@ -597,9 +593,16 @@ Using greedy quantifier:\\
 
 \regex{\input{./url.tex}}\\
 
-\sectiontitle{Match an email address}
+\sectiontitle{Match closing XML tag}
 
-\regex{\input{./email_addr.tex}}
+Using lazy quantifier:
+\cregex{\input{./matchclosetag_lazy.tex}}\\
+Using greedy quantifier:
+\cregex{\input{./matchclosetag_greedy.tex}}\\
+Loop-unrolling with
+\regex{normal} = \cregex{[\^{}<]} and
+\regex{special} = \cregex{(?!</?B>)<}:\\
+\regex{\input{./matchclosetag_lu.tex}}\\
 
 \end{col2}
 
