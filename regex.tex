@@ -64,6 +64,9 @@ tabsize=2, % Number of spaces per tab in the code
 \newcommand{\dnet}{{.}Net}
 \newcommand{\insertcode}[2]{\lstinputlisting[label=#2,style=#1]{#2}}
 
+\newcommand{\reshortexample}[1]{\cregex{\input{#1}}}
+\newcommand{\relongexample}[1]{\regex{\input{#1}}}
+
 \begin{document}
 
 \begin{cheatsheet}{Regular Expressions Basics}
@@ -488,25 +491,25 @@ like in \cregex{(\re{}1|\re{}2|\dots)*}.\\
 
 \sectiontitle{Match quoted string with escaped quotes}
 
-\cregex{\input{./quoted_string.tex}}\\
+\reshortexample{./quoted_string.tex}\\
 \emph{Note:} Possessive quantifiers prevent very long execution times (due to
 the nested quantifiers \cregex{+} and \cregex{*}) when there is no matching.\\
 Loop-unrolling version:\\
-\cregex{\input{./quoted_string_lu.tex}}\\
+\reshortexample{./quoted_string_lu.tex}\\
 
 \sectiontitle{Conditional expressions}
 
 \begin{itemize}
 	\item Backreference as condition: Match a word optionally wrapped in \code{<$\cdots$>}:\\
-	\cregex{\input{./cond_backref.tex}}
+	\reshortexample{./cond_backref.tex}
 	\item Lookaround as condition: Check for number only if prefixed with ``\code{NUM:}'':\\
-	\cregex{\input{./cond_lookaround.tex}}
+	\reshortexample{./cond_lookaround.tex}
 \end{itemize}
 
 \sectiontitle{Branch reset}
 
 Always capture the number under \cregex{\bs{}1} (or \cregex{\$1}):\\
-\cregex{\input{./branch_reset.tex}}
+\reshortexample{./branch_reset.tex}
 
 \sectiontitle{Match continuation line}
 
@@ -516,7 +519,7 @@ at the end of each split. Example:\\
 \mbox{}\ \ SRC=a.c b.c c.c \bs\\
 \mbox{}\ \ \ \ \ \ d.c e.c}
 
-\regex{\input{./cont_line.tex}}
+\relongexample{./cont_line.tex}
 
 \end{col1}
 
@@ -525,21 +528,21 @@ at the end of each split. Example:\\
 \sectiontitle{Extract file name from path}
 
 Perl:\\
-\regex{\input{./extract_filename.tex}}\\
+\relongexample{./extract_filename.tex}\\
 
 \sectiontitle{Adding thousand separators to a number}
 
 Using lookaround:\\
-\cregex{\input{./thousandsep_1.tex}}\\
+\reshortexample{./thousandsep_1.tex}\\
 
 Without using lookaround (in Perl):\\
-\regex{\input{./thousandsep_2.tex}}\\
+\relongexample{./thousandsep_2.tex}\\
 
 \sectiontitle{Fix floating-point problems}
 
 Use at most $3$ decimal places. Change numbers like $3.27600000002828$ into
 $3.276$; or $4.120000000034$ into $4.12$:\\
-\cregex{\input{./fixfloat.tex}}\\
+\reshortexample{./fixfloat.tex}\\
 
 \end{col2}
 
@@ -547,17 +550,17 @@ $3.276$; or $4.120000000034$ into $4.12$:\\
 
 \sectiontitle{Match a date (month and day)}
 
-\regex{\input{./date.tex}}\\
+\relongexample{./date.tex}\\
 
 \sectiontitle{Match time (am/pm)}
 
-\cregex{\input{./time12.tex}}\\
+\reshortexample{./time12.tex}\\
 
 \sectiontitle{Match time (24 hours)}
 
-\cregex{\input{./time24_1.tex}}\\
+\reshortexample{./time24_1.tex}\\
 or\\
-\cregex{\input{./time24_2.tex}}\\
+\reshortexample{./time24_2.tex}\\
 
 \end{col3}
 
@@ -574,16 +577,16 @@ or\\
 This regex matches each field in a CSV line, supporting fields with or without
 surrounding double-quotes. In the former case, a double quote is represented by
 a pair of double quotes:\\
-\regex{\input{./parse_csv.tex}}\\
+\relongexample{./parse_csv.tex}\\
 
 \sectiontitle{Match IP address}
 
 Using Perl regex object for clarity:\\
-\regex{\input{./ip.tex}}\\
+\relongexample{./ip.tex}\\
 
 \sectiontitle{Match an email address}
 
-\regex{\input{./email_addr.tex}}
+\relongexample{./email_addr.tex}
 
 \end{col1}
 
@@ -591,18 +594,18 @@ Using Perl regex object for clarity:\\
 
 \sectiontitle{Match a URL}
 
-\regex{\input{./url.tex}}\\
+\relongexample{./url.tex}\\
 
 \sectiontitle{Match closing XML tag}
 
 Using lazy quantifier:
-\cregex{\input{./matchclosetag_lazy.tex}}\\
+\reshortexample{./matchclosetag_lazy.tex}\\
 Using greedy quantifier:
-\cregex{\input{./matchclosetag_greedy.tex}}\\
+\reshortexample{./matchclosetag_greedy.tex}\\
 Loop-unrolling with
 \regex{normal} = \cregex{[\^{}<]} and
 \regex{special} = \cregex{(?!</?B>)<}:\\
-\regex{\input{./matchclosetag_lu.tex}}\\
+\relongexample{./matchclosetag_lu.tex}\\
 
 \end{col2}
 
@@ -611,12 +614,12 @@ Loop-unrolling with
 \sectiontitle{Balanced parentheses (static)}
 
 Match up to $n$ levels of nested parentheses:\\
-\regex{\input{./balanced_paren_static.tex}}\\
+\relongexample{./balanced_paren_static.tex}\\
 
 \sectiontitle{Balanced parentheses (dynamic)}
 
 Match a function call with balanced parentheses:\\
-\regex{\input{./balanced_paren_dynamic.tex}}\\
+\relongexample{./balanced_paren_dynamic.tex}\\
 
 \end{col3}
 
