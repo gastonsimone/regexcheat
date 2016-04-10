@@ -67,6 +67,9 @@ tabsize=2, % Number of spaces per tab in the code
 \newcommand{\reshortexample}[1]{\cregex{\input{#1}}}
 \newcommand{\relongexample}[1]{\regex{\input{#1}}}
 
+\newcommand{\equivalence}[2]{\cmdleft{#1}=\cmdleft{#2}\\}
+\newcommand{\equivcomment}[3]{\cmdleft{#1}=\cmdleft{#2}\dotfill{}~\cmdright{#3}\\}
+
 \begin{document}
 
 \begin{cheatsheet}{Regular Expressions Basics}
@@ -416,6 +419,8 @@ Perl/Java/\dnet:\\
 
 \begin{col1}
 
+Notation: $worse\to better$
+
 \sectiontitle{General guidelines}
 \begin{itemize}
 	\item Avoid recompiling the \re.
@@ -432,17 +437,46 @@ Perl/Java/\dnet:\\
 		engines).
 \end{itemize}
 
-\sectiontitle{Lazy quantifiers may be slower than greedy ones}
-
+\sectiontitle{Lazy quantifiers may be slower than greedy}
 Because they must jump between checking what the quantifier controls with
 checking what comes after. Example: \cregex{"(.*?)"} to match a double-quoted
 string. Compare with the example in the next page.
+
+\sectiontitle{Expose anchors}
+
+\cregex{\^{}this|\^{}that} $\to$ \cregex{\^{}(?:this|that)}.\\
+\cregex{abc\$|123\$} $\to$ \cregex{(?:abc|123)\$} (only affects Perl).\\
+\re{} only tried at places where the anchor (i.e. \cregex{\^{}}) matches.
 
 \end{col1}
 
 \begin{col2}
 
-Notation: $worse\to better$
+\sectiontitle{Algebraic identities}
+
+\textbf{Note:} In this section all parenthesis are non-capturing. These are
+strictly theoretical equivalences.
+
+\equivcomment{r|s}{s|r}{commutativity for alternation\textsuperscript{$\dagger$}}
+\equivcomment{r|(s|t)}{(r|s)|t}{associativity for alternation}
+\equivcomment{r|r}{r}{absorption of alternation}
+\equivcomment{r(st)}{(rs)t}{associativity for concatenarion}
+\equivcomment{r(s|t)}{rs|rt}{left distributivity}
+\equivcomment{(s|t)r}{sr|tr}{right distributivity}
+\equivcomment{r$\epsilon$}{r}{identity for concatenation}
+\equivcomment{r*r*}{r*}{closure absorption}
+\equivcomment{r*}{$\epsilon$|r|rr|\dots}{Kleene closure}
+\equivcomment{rr*}{r*r}{\cregex{r+}}
+\equivalence{(r*)*}{r*}
+\equivalence{(r*|s*)*}{(r*s*)*}
+\equivalence{(r*s*)*}{(r|s)*}
+\equivalence{(rs)*r}{r(sr)*}
+\equivalence{(r|s)*}{(r*s)*r*}
+
+\begin{cheatnote}
+$\dagger$ It is not the same in terms of performance for a NFA engine, where
+alternatives are tried in order of appearance.\\
+\end{cheatnote}
 
 \sectiontitle{Expose literal text}
 
@@ -453,24 +487,19 @@ The engine can use a fast substring search (like the
 or the Hume-Sunday algorithms) to find the literal text (i.e. \cregex{th}) and
 then match the rest of the \re.
 
-\sectiontitle{Expose anchors}
-
-\cregex{\^{}this|\^{}that} $\to$ \cregex{\^{}(?:this|that)}.\\
-\cregex{abc\$|123\$} $\to$ \cregex{(?:abc|123)\$} (only affects Perl).\\
-\re{} only tried at places where the anchor (i.e. \cregex{\^{}}) matches.
-
 \end{col2}
 
 \begin{col3}
 
 \sectiontitle{Loop unrolling}
 
-Useful to optimise pattern with the following structure:
+Useful to optimise a regex with the following structure:
 \cregex{(normal|special)*}. This can be changed to:\\
 \cregex{opening normal*(?:special normal*)* closing},\\
 where \regex{opening}, \regex{normal}, \regex{special} and \regex{closing} are
 all regular expressions. It can be used to optimise any number of alternatives,
 like in \cregex{(\re{}1|\re{}2|\dots)*}.\\
+
 \textbf{Notes:}
 \begin{enumerate}
 	\item \regex{normal} should be the most common case
@@ -479,6 +508,7 @@ like in \cregex{(\re{}1|\re{}2|\dots)*}.\\
 	\item \regex{special} must not match the \emph{empty string}.
 	\item \regex{special} must be atomic.
 \end{enumerate}
+See the examples.
 
 \end{col3}
 
