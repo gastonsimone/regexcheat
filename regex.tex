@@ -45,6 +45,7 @@ tabsize=2, % Number of spaces per tab in the code
 \lstdefinestyle{CSharp}{language=[Sharp]C,style=SourceCode}
 \lstdefinestyle{Python}{language=Python,style=SourceCode}
 \lstdefinestyle{Bash}{language=bash,style=SourceCode,morekeywords={perl}}
+\lstdefinestyle{RegEx}{language={},style=SourceCode,backgroundcolor=\color{gray!30},rulecolor=\color{gray!30},frameround=ffff}
 
 \usepackage[% This block contains information used to annotate the PDF
 	colorlinks=true,
@@ -60,7 +61,7 @@ tabsize=2, % Number of spaces per tab in the code
 \renewcommand{\ttdefault}{pcr} % Use Courier as mono-spaced font
 
 \newcommand{\regex}[1]{\texttt{#1}}
-\newcommand{\cregex}[1]{\colorbox{gray!30}{\regex{#1}}}
+\newcommand{\cregex}[1]{\colorbox{gray!30}{\small\regex{#1}}}
 \renewcommand{\cmdleft}[1]{\cregex{#1}}
 \newcommand{\code}[1]{\texttt{#1}}
 \newcommand{\bs}{\textbackslash}
@@ -69,7 +70,7 @@ tabsize=2, % Number of spaces per tab in the code
 \newcommand{\insertcode}[2]{\lstinputlisting[label=#2,style=#1]{#2}}
 
 \newcommand{\reshortexample}[1]{\cregex{\input{#1}}}
-\newcommand{\relongexample}[1]{\regex{\input{#1}}}
+\newcommand{\relongexample}[1]{\lstinputlisting[label=#1,style=RegEx]{./regex_examples/#1}}
 
 \newcommand{\equivalence}[2]{\cmdleft{#1}=\cmdleft{#2}\\}
 \newcommand{\equivcomment}[3]{\cmdleft{#1}=\cmdleft{#2}\dotfill{}~\cmdright{#3}\\}
@@ -558,16 +559,16 @@ $3.276$; or $4.120000000034$ into $4.12$:\\
 
 \sectiontitle{Extract file name from path}
 
-Perl:\\
-\relongexample{./extract_filename.tex}\\
+Perl:
+\relongexample{extract_filename.regex}
 
 \sectiontitle{Adding thousand separators to a number}
 
 Using lookaround:\\
 \reshortexample{./thousandsep_1.tex}\\
 
-Without using lookaround (in Perl):\\
-\relongexample{./thousandsep_2.tex}\\
+Without using lookaround (in Perl):
+\relongexample{thousandsep_2.regex}
 
 \sectiontitle{Match continuation line}
 
@@ -578,8 +579,9 @@ at the end of each split. Example:\\
 \mbox{}\ \ \ \ \ \ d.c e.c}
 
 \reshortexample{./cont_line.tex}\\
-Loop-unrolling version:\\
-\relongexample{./cont_line_lu.tex}
+
+Loop-unrolling version:
+\relongexample{cont_line_lu.regex}
 
 \end{col2}
 
@@ -587,7 +589,7 @@ Loop-unrolling version:\\
 
 \sectiontitle{Match a date (month and day)}
 
-\relongexample{./date.tex}\\
+\relongexample{date.regex}
 
 \sectiontitle{Match time (am/pm)}
 
@@ -613,20 +615,20 @@ or\\
 
 This regex matches each field in a CSV line, supporting fields with or without
 surrounding double-quotes. In the former case, a double quote is represented by
-a pair of double quotes:\\
-\relongexample{./parse_csv.tex}\\
+a pair of double quotes:
+\relongexample{parse_csv.regex}
 The line with the ``slow'' comment can be made faster using loop unrolling,
 with \regex{normal} = \cregex{[\^{}"]} and \regex{special} = \cregex{""}:
 \reshortexample{./parse_csv_lu.tex}\\
 
 \sectiontitle{Match IP address}
 
-Using Perl regex object for clarity:\\
-\relongexample{./ip.tex}\\
+Using Perl regex object for clarity:
+\relongexample{ip.regex}
 
 \sectiontitle{Match an email address}
 
-\relongexample{./email_addr.tex}
+\relongexample{email_addr.regex}
 
 \end{col1}
 
@@ -634,7 +636,7 @@ Using Perl regex object for clarity:\\
 
 \sectiontitle{Match a URL}
 
-\relongexample{./url.tex}\\
+\relongexample{url.regex}
 
 \sectiontitle{Match closing XML tag}
 
@@ -645,7 +647,7 @@ Using greedy quantifier:
 Loop-unrolling with
 \regex{normal} = \cregex{[\^{}<]} and
 \regex{special} = \cregex{(?!</?B>)<}:\\
-\relongexample{./matchclosetag_lu.tex}\\
+\relongexample{matchclosetag_lu.regex}
 
 \end{col2}
 
@@ -653,13 +655,13 @@ Loop-unrolling with
 
 \sectiontitle{Balanced parentheses (static)}
 
-Match up to $n$ levels of nested parentheses:\\
-\relongexample{./balanced_paren_static.tex}\\
+Match up to $n$ levels of nested parentheses:
+\relongexample{balanced_paren_static.regex}
 
 \sectiontitle{Balanced parentheses (dynamic)}
 
-Match a function call with balanced parentheses:\\
-\relongexample{./balanced_paren_dynamic.tex}\\
+Match a function call with balanced parentheses:
+\relongexample{balanced_paren_dynamic.regex}
 
 \end{col3}
 
