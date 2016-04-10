@@ -16,7 +16,7 @@
 \definecolor{highlight}{RGB}{255,251,204} % Code highlight color
 
 \lstloadlanguages{Perl,Java,[Sharp]C,Python,bash}
-\lstdefinestyle{SourceCode}{
+\lstdefinestyle{SourceCode}{%
 backgroundcolor=\color{highlight},
 basicstyle=\footnotesize\ttfamily,
 breakatwhitespace=false,
@@ -109,8 +109,8 @@ The difference between these occurs in multi-line mode.\\
 \command{\bs{}Q\emph{text}\bs{}E}{Literal \emph{text} inside regex}
 
 $\dagger$ Perl/Java/\dnet:\\
-\mbox{}\ \ \ \ \regex{\bs{}<} $\to$ \regex{(?<!\bs{}w)(?=\bs{}w)}\\
-\mbox{}\ \ \ \ \regex{\bs{}>} $\to$ \regex{(?<=\bs{}w)(?!\bs{}w)}\\
+\mbox{}\ \ \ \ \cregex{\bs{}<} $\to$ \cregex{(?<!\bs{}w)(?=\bs{}w)}\\
+\mbox{}\ \ \ \ \cregex{\bs{}>} $\to$ \cregex{(?<=\bs{}w)(?!\bs{}w)}\\
 (see \emph{Lookaround} in next page).
 
 \end{col1}
@@ -125,8 +125,8 @@ $\dagger$ Perl/Java/\dnet:\\
 
 \sectiontitle{Substitutions}
 
-\command{\regex{\$1},\dots,\regex{\$9}}{$[1..9]$-th matched \regex{()}}
-\command{\regex{\$+}}{Last matched \regex{()}}
+\command{\$1,\dots,\$9}{$[1..9]$-th matched \regex{()}}
+\command{\$+}{Last matched \regex{()}}
 \command{\$\&, \&}{Entire matched string (Perl, Vim)}
 \command{\$\`{}, \$\textquotesingle{}}{Text [before, after] match}
 \command{\$\_}{Entire input text}
@@ -166,15 +166,15 @@ efficiency.\\
 \sectiontitle{Shorthands}
 
 \command{\bs{}s}{White space (space, tab, etc.)\textsuperscript{$\dagger$}}
-\command{\bs{}S}{Not \regex{\bs{}s}}
-\command{\bs{}d}{Digit (\regex{[0-9]})\textsuperscript{$\dagger$}}
-\command{\bs{}D}{Not \regex{\bs{}d}}
-\command{\bs{}w}{Word char (\regex{[a-zA-Z0-9\_]})\textsuperscript{$\dagger$}}
-\command{\bs{}W}{Not \regex{\bs{}w}}
+\command{\bs{}S}{Not \cregex{\bs{}s}}
+\command{\bs{}d}{Digit (\cregex{[0-9]})\textsuperscript{$\dagger$}}
+\command{\bs{}D}{Not \cregex{\bs{}d}}
+\command{\bs{}w}{Word char (\cregex{[a-zA-Z0-9\_]})\textsuperscript{$\dagger$}}
+\command{\bs{}W}{Not \cregex{\bs{}w}}
 \command{\bs{}t, \bs{}n}{Tab, New line}
 \begin{cheatnote}
 $\dagger$ Some flavours also recognise special Unicode characters in the same character group.\\
-In Vim \regex{\bs\_s} also includes new line.\\
+In Vim \cregex{\bs\_s} also includes new line.\\
 \end{cheatnote}
 
 \sectiontitle{Modes and Flags}
@@ -189,7 +189,7 @@ In Vim \regex{\bs\_s} also includes new line.\\
 $\dagger$ Java: \code{Pattern.CASE\_INSENSITIVE},\\
 \dnet: \code{RegexOptions.IgnoreCase}.
 \end{cheatnote}
-$\ddagger$ In Vim, use \regex{\bs\_.} to make dot match new lines.\\
+$\ddagger$ In Vim, use \cregex{\bs\_.} to make dot match new lines.\\
 \begin{cheatnote}
 \textsection\ Java: \code{Pattern.COMMENTS},\\
 \dnet: \code{RegexOptions.IgnorePatternWhiteSpace}.
@@ -253,10 +253,10 @@ states for the enclosed \re.\\
 
 \sectiontitle{Possessive quantifiers}
 
-\command{\re?+}{\regex{(?>\re?)}}
-\command{\re*+}{\regex{(?>\re*)}}
-\command{\re++}{\regex{(?>\re+)}}
-\command{\re\{n,m\}+}{\regex{(?>\re\{n,m\})}}
+\command{\re?+}{\cregex{(?>\re?)}}
+\command{\re*+}{\cregex{(?>\re*)}}
+\command{\re++}{\cregex{(?>\re+)}}
+\command{\re\{n,m\}+}{\cregex{(?>\re\{n,m\})}}
 
 Not available in Vim (but can be done with atomic grouping).\\
 
@@ -367,11 +367,11 @@ Perl/Java/\dnet:\\
 \command{[:digit:]}{Numeric characters}
 \command{[:graph:]}{Non-blank characters}
 \command{[:lower:]}{Lower-case alphabetic characters}
-\command{[:print:]}{\regex{[:graph:]} and the space character}
+\command{[:print:]}{\cregex{[:graph:]} and the space character}
 \command{[:punct:]}{Punctuation characters}
 \command{[:space:]}{All whitespace characters}
 \command{[:upper:]}{Upper-case alphabetic characters}
-\command{[:xdigit:]}{Hexadecimal digits (\regex{[0-9a-fA-F]})}
+\command{[:xdigit:]}{Hexadecimal digits (\cregex{[0-9a-fA-F]})}
 
 \sectiontitle{POSIX collating sequences}
 
