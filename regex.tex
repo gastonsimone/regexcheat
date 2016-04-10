@@ -449,8 +449,9 @@ Notation: $worse\to better$
 \cregex{this|that} $\to$ \cregex{th(?:is|at)}.\\
 \cregex{-\{5,7\}} $\to$ \cregex{------\{0,2\}}.\\
 The engine can use a fast substring search (like the
-\href{https://en.wikipedia.org/wiki/Boyer–Moore_string_search_algorithm}{Boyer-Moore algorithm}) to
-find the literal text (i.e. \cregex{th}) and then match the rest of the \re.
+\href{https://en.wikipedia.org/wiki/Boyer–Moore_string_search_algorithm}{Boyer-Moore}
+or the Hume-Sunday algorithms) to find the literal text (i.e. \cregex{th}) and
+then match the rest of the \re.
 
 \sectiontitle{Expose anchors}
 
@@ -511,15 +512,11 @@ Loop-unrolling version:\\
 Always capture the number under \cregex{\bs{}1} (or \cregex{\$1}):\\
 \reshortexample{./branch_reset.tex}
 
-\sectiontitle{Match continuation line}
+\sectiontitle{Fix floating-point rounding problems}
 
-Match a single ``logical'' line split into multiple lines by adding \cregex{\bs}
-at the end of each split. Example:\\
-\texttt{%
-\mbox{}\ \ SRC=a.c b.c c.c \bs\\
-\mbox{}\ \ \ \ \ \ d.c e.c}
-
-\relongexample{./cont_line.tex}
+Use at most $3$ decimal places. Change numbers like $3.27600000002828$ into
+$3.276$; or $4.120000000034$ into $4.12$:\\
+\reshortexample{./fixfloat.tex}\\
 
 \end{col1}
 
@@ -538,11 +535,17 @@ Using lookaround:\\
 Without using lookaround (in Perl):\\
 \relongexample{./thousandsep_2.tex}\\
 
-\sectiontitle{Fix floating-point problems}
+\sectiontitle{Match continuation line}
 
-Use at most $3$ decimal places. Change numbers like $3.27600000002828$ into
-$3.276$; or $4.120000000034$ into $4.12$:\\
-\reshortexample{./fixfloat.tex}\\
+Match a single ``logical'' line split into multiple lines by adding \cregex{\bs}
+at the end of each split. Example:\\
+\texttt{%
+\mbox{}\ \ SRC=a.c b.c c.c \bs\\
+\mbox{}\ \ \ \ \ \ d.c e.c}
+
+\reshortexample{./cont_line.tex}\\
+Loop-unrolling version:\\
+\relongexample{./cont_line_lu.tex}
 
 \end{col2}
 
@@ -578,6 +581,9 @@ This regex matches each field in a CSV line, supporting fields with or without
 surrounding double-quotes. In the former case, a double quote is represented by
 a pair of double quotes:\\
 \relongexample{./parse_csv.tex}\\
+The line with the ``slow'' comment can be made faster using loop unrolling,
+with \regex{normal} = \cregex{[\^{}"]} and \regex{special} = \cregex{""}:
+\reshortexample{./parse_csv_lu.tex}\\
 
 \sectiontitle{Match IP address}
 

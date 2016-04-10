@@ -1,0 +1,8 @@
+^\w+=            # Leading field and '='
+(                # Capture complete line
+	(?> [^\n\\]* ) # normal
+	(?>
+		\\.          # special
+		[^\n\\]*     # normal
+	)*
+)
