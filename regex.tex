@@ -1,5 +1,5 @@
 % vim: autowrite
-\documentclass[11pt, a4paper, landscape]{scrartcl}
+\documentclass[10pt, a4paper, landscape]{scrartcl}
 
 \usepackage{cheatsheet} % See cheatsheet.sty
 \usepackage{nimbusmononarrow} % Required for tt font type
@@ -54,6 +54,10 @@ tabsize=2, % Number of spaces per tab in the code
 	pdfsubject={Regular Expressions cheatsheet},
 	pdfkeywords={Regular Expressions, Cheatsheet}
 ]{hyperref}
+
+\renewcommand{\familydefault}{\sfdefault} % Use sans-serif fond as bodytext family font
+\renewcommand{\sfdefault}{phv} % Use Helvetica as sans-serif font
+\renewcommand{\ttdefault}{pcr} % Use Courier as mono-spaced font
 
 \newcommand{\regex}[1]{\texttt{#1}}
 \newcommand{\cregex}[1]{\colorbox{gray!30}{\regex{#1}}}
